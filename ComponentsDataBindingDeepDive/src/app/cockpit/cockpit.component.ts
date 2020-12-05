@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-cockpit',
@@ -7,28 +7,39 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CockpitComponent implements OnInit {
 
-   newServerName = '';
+
+//
+
+//Declaration of Output Property (Event) 
+// NameOfEvent = new EventEmitter <Type of informations sent to the parent Component when the event is launched >()
+//expose them to the Parent Component by adding the Decorator @Output()
+
+  @Output() serverCreated = new EventEmitter<{serverName: string, serverContent: string }>();
+  @Output() blueprintCreated = new EventEmitter<{serverName: string, serverContent: string }>();
+
+  newServerName = '';
   newServerContent = '';
+
+  @ViewChild('InputServerName')   serverNameInput: ElementRef;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
-
+// if addServer Button is pressed we're going to Emit(launch) the Event Created(informations to send to the parent Component) 
   onAddServer() {
-  /*  this.serverElements.push({
-      type: 'server',
-      name: this.newServerName,
-      content: this.newServerContent
-    });*/
+  this.serverCreated.emit({
+      serverName: this.newServerName,
+      serverContent: this.newServerContent
+    });
   }
 
   onAddBlueprint() {
-   /* this.serverElements.push({
-      type: 'blueprint',
-      name: this.newServerName,
-      content: this.newServerContent
-    });*/
+    this.blueprintCreated.emit({
+      serverName: this.newServerName,
+      serverContent: this.newServerContent
+    });
   }
 
 }
